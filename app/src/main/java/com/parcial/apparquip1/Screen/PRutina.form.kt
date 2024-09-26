@@ -49,12 +49,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.text.style.TextOverflow
 import com.parcial.apparquip1.Datos.entidades.Rutina
 import com.parcial.apparquip1.DialogoCustom
-
+import com.parcial.apparquip1.Presentacion.PRutina
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PRutina(navController: NavHostController, screenWidth: Dp, screenHeight: Dp) {
     val context = LocalContext.current
-    val pRutina = com.parcial.apparquip1.Presentacion.PRutina(context)
+    val pRutina = PRutina(context)
     val focusManager = LocalFocusManager.current
 
     var isCreate by remember { mutableStateOf(true) }

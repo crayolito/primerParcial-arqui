@@ -47,12 +47,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.parcial.apparquip1.Datos.entidades.CategoriaEjer
 import com.parcial.apparquip1.DialogoCustom
+import com.parcial.apparquip1.Presentacion.PCategoriEjer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PCategoriEjer(navController: NavHostController, screenWidth: Dp, screenHeight: Dp) {
     val context = LocalContext.current
-    val pCategoriaEjer = com.parcial.apparquip1.Presentacion.PCategoriEjer(context)
+    val pCategoriaEjer = PCategoriEjer(context)
     var isCreate by remember { mutableStateOf(true) }
     val focusManager = LocalFocusManager.current
     var id: Int by remember { mutableStateOf(0) }

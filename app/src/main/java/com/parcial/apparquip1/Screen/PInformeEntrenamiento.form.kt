@@ -35,12 +35,12 @@ import com.parcial.apparquip1.Datos.entidades.Cliente
 import com.parcial.apparquip1.Datos.entidades.Rutina
 import com.parcial.apparquip1.DialogoCustom
 import com.parcial.apparquip1.R
-
+import com.parcial.apparquip1.Presentacion.PInformeEntrenamiento
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PInformeEntrenamiento(navController: NavHostController, screenWidth: Dp, screenHeight: Dp) {
     val context = LocalContext.current
-    val pInformeEntrenamiento = com.parcial.apparquip1.Presentacion.PInformeEntrenamiento(context);
+    val pInformeEntrenamiento = PInformeEntrenamiento(context);
     val focusManager = LocalFocusManager.current
     var pdfPath by remember { mutableStateOf<String?>(null) }
 

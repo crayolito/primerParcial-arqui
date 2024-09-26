@@ -53,13 +53,13 @@ import androidx.navigation.NavHostController
 import com.parcial.apparquip1.Datos.entidades.CategoriaEjer
 import com.parcial.apparquip1.Datos.entidades.PlanEjercicio
 import com.parcial.apparquip1.DialogoCustom
-
+import com.parcial.apparquip1.Presentacion.PPlanEjercicio
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PPlanEjercicio(navController: NavHostController, screenWidth: Dp, screenHeight: Dp) {
     val context = LocalContext.current
-    val pPlanEjercicio = com.parcial.apparquip1.Presentacion.PPlanEjercicio(context)
+    val pPlanEjercicio = PPlanEjercicio(context)
     var isCreate by remember { mutableStateOf(true) }
     val focusManager = LocalFocusManager.current
     var id: Int by remember { mutableStateOf(0) }

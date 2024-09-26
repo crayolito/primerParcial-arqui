@@ -45,12 +45,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.parcial.apparquip1.Datos.entidades.Cliente
-
+import com.parcial.apparquip1.Presentacion.PCliente
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PCliente(navController: NavHostController, screenWidth: Dp, screenHeight: Dp) {
     val context = LocalContext.current
-    val pCliente = com.parcial.apparquip1.Presentacion.PCliente(context)
+    val pCliente = PCliente(context)
     var isCreate by remember { mutableStateOf(true) }
     val focusManager = LocalFocusManager.current
     var id: Int by remember { mutableStateOf(0) }
