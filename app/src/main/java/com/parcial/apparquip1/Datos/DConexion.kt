@@ -37,85 +37,109 @@ class DConexion(contexto: Context) : SQLiteOpenHelper(contexto, "dbparcial", nul
 
         db?.execSQL(
             """
-    INSERT INTO cliente (nombre, telefono, meta, caracteristicas) VALUES
-    ('Carlos López', '67756537', 'Perder peso', 'Alérgico al gluten, rutina baja en impacto'),
-    ('María Sánchez', '67756537', 'Tonificar', 'No puede hacer ejercicios de alta intensidad'),
-    ('Jorge Pérez', '78452415', 'Ganar masa muscular', 'Dieta alta en proteínas, ejercicios con pesas'),
-    ('Ana Gómez', '67756537', 'Mejorar resistencia', 'Vegetariana, rutina con mucho cardio'),
-    ('Luis Martínez', '78452415', 'Mantenerse en forma', 'Debe evitar ejercicios de fuerza en rodillas');
+INSERT INTO cliente (nombre, telefono, meta, caracteristicas) VALUES
+('Juan Pérez', '70008213', 'Perder peso', 'Altura: 1.75m, Peso: 85kg, Edad: 30 años'),
+('María Rodríguez', '78452415', 'Tonificar', 'Altura: 1.62m, Peso: 58kg, Edad: 28 años'),
+('Carlos Gómez', '70008213', 'Ganar masa muscular', 'Altura: 1.80m, Peso: 75kg, Edad: 35 años'),
+('Sofía Blanco', '70008213', 'Mejorar resistencia', 'Altura: 1.68m, Peso: 62kg, Edad: 25 años'),
+('Pedro Suárez', '78452415', 'Aumentar flexibilidad', 'Altura: 1.85m, Peso: 90kg, Edad: 40 años'),
+('Luisa Torres', '67756537', 'Rehabilitación post-lesión', 'Altura: 1.60m, Peso: 55kg, Edad: 32 años');
 """.trimIndent()
         )
 
         db?.execSQL(
             """
-    INSERT INTO alimentacion (titulo, descripcion, noprocesado, procesado) VALUES
-    ('Plan Bajo en Carbohidratos', 'Dieta para reducir la ingesta de carbohidratos', 'Verduras, carnes magras, huevos', 'Pan integral, pasta de trigo'),
-    ('Plan Alto en Proteínas', 'Dieta para aumentar la masa muscular', 'Huevos, pollo, pescado, lentejas', 'Proteínas en polvo, barras proteicas'),
-    ('Plan Vegetariano', 'Dieta sin productos animales', 'Frutas, verduras, granos enteros', 'Quesos, sustitutos de carne procesados'),
-    ('Plan Detox', 'Dieta para desintoxicar el cuerpo', 'Frutas, jugos naturales, agua', 'Comidas preprocesadas limitadas'),
-    ('Plan Alto en Fibra', 'Dieta para mejorar la digestión', 'Avena, frutas, vegetales frescos', 'Pan de fibra procesada, cereales de caja'),
-    ('Plan Hipocalórico', 'Dieta para reducir el consumo calórico', 'Verduras, frutas bajas en azúcar', 'Barras de granola bajas en calorías'),
-    ('Plan Energético', 'Dieta para aumentar la energía', 'Frutas, frutos secos, avena', 'Barras de cereales, snacks procesados');
+INSERT INTO alimentacion (titulo, descripcion, noprocesado, procesado) VALUES
+('Dieta Baja en Carbohidratos', 'Plan de alimentación para reducir el consumo de carbohidratos', 'Pollo, Espinaca, Brócoli, Huevos', 'Pan integral, Tortillas de maíz'),
+('Dieta Mediterránea', 'Alto en grasas saludables y bajo en alimentos procesados', 'Pescado, Aceite de oliva, Almendras, Tomates', 'Pasta, Pan de centeno'),
+('Dieta Vegana', 'Plan de alimentación basado en plantas', 'Tofu, Garbanzos, Lentejas, Espinacas', 'Hamburguesa de soja, Leche de almendras'),
+('Dieta Proteica', 'Alta en proteínas para ganar masa muscular', 'Pechuga de pollo, Huevo, Lentejas', 'Proteína en polvo, Barras de proteína'),
+('Dieta Detox', 'Plan para desintoxicar el cuerpo', 'Pepino, Apio, Jengibre, Limón', 'Smoothies detox, Jugo verde envasado'),
+('Dieta Cetogénica', 'Alta en grasas, muy baja en carbohidratos', 'Aguacate, Carne, Mantequilla, Queso', 'Crema de leche, Snacks cetogénicos'),
+('Dieta Paleo', 'Basada en alimentos no procesados', 'Carne magra, Frutas, Verduras, Frutos secos', 'Frutas secas, Yogur natural'),
+('Dieta Baja en Grasas', 'Reducir el consumo de grasas y calorías', 'Pechuga de pavo, Espárragos, Frutas', 'Galletas de arroz, Yogur bajo en grasa');
+
 """.trimIndent()
         )
 
         db?.execSQL(
             """
-    INSERT INTO categoria_ejer (nombre, descripcion) VALUES
-    ('Cardio', 'Ejercicios enfocados en aumentar la resistencia cardiovascular'),
-    ('Fuerza', 'Ejercicios enfocados en el aumento de la fuerza muscular'),
-    ('Resistencia', 'Ejercicios para mejorar la resistencia general'),
-    ('Flexibilidad', 'Ejercicios que mejoran la flexibilidad'),
-    ('Core', 'Ejercicios para fortalecer el abdomen y la espalda baja'),
-    ('Movilidad', 'Ejercicios para mejorar el rango de movimiento de las articulaciones'),
-    ('Potencia', 'Ejercicios de explosión para desarrollar potencia muscular'),
-    ('Calistenia', 'Ejercicios que utilizan el peso corporal como resistencia');
+INSERT INTO categoria_ejer (nombre, descripcion) VALUES
+('Cardio', 'Ejercicios que aumentan la frecuencia cardíaca, ideales para quemar calorías.'),
+('Fuerza', 'Ejercicios para mejorar la fuerza muscular, generalmente con pesas.'),
+('Flexibilidad', 'Ejercicios que mejoran la flexibilidad y el rango de movimiento.'),
+('Resistencia', 'Ejercicios que ayudan a aumentar la resistencia física.'),
+('Entrenamiento funcional', 'Ejercicios que imitan movimientos cotidianos.'),
+('Yoga', 'Práctica que combina ejercicios físicos con respiración y meditación.'),
+('Pilates', 'Sistema de ejercicios que fortalecen el cuerpo sin aumentar el volumen muscular.'),
+('HIIT', 'Entrenamiento de intervalos de alta intensidad.'),
+('Ciclismo', 'Ejercicios relacionados con la práctica de andar en bicicleta.'),
+('Natación', 'Ejercicio realizado en el agua que trabaja todo el cuerpo.');
+
 """.trimIndent()
         )
 
         db?.execSQL(
             """
-    INSERT INTO planEjercicio (titulo, motivo, objetivo, video, proceso) VALUES
-    ('Entrenamiento Cardio Básico', 'Mejorar la salud cardiovascular', 'Aumentar la resistencia', 'https://youtu.be/Cqalzxz9daY?si=tkFcJibzaA-jBSXe', 'Correr 30 minutos, bicicleta 20 minutos'),
-    ('Entrenamiento de Fuerza', 'Aumentar masa muscular', 'Desarrollar fuerza en brazos y piernas', 'https://youtu.be/ApE_7jnFUyo?si=edMrywdAvVkf-U5z', 'Pesas 3 series, sentadillas con barra 4 series'),
-    ('Flexibilidad Avanzada', 'Mejorar la flexibilidad corporal', 'Alcanzar movimientos más fluidos', 'https://youtu.be/bgX8GqYsQAg?si=TWBIQbHzwtH7-M_o', 'Estiramientos de piernas y espalda, yoga 15 min'),
-    ('Entrenamiento Core', 'Fortalecer la zona abdominal', 'Desarrollar un core fuerte', 'https://youtu.be/5uFpo7KHOrI?si=ekgHHLrfuAW1IYCs', 'Abdominales, planchas, levantamiento de piernas'),
-    ('Movilidad de Cadera', 'Mejorar la movilidad en las caderas', 'Aumentar el rango de movimiento', 'https://youtu.be/2PVk2wUY04k?si=LvnFcYFsXqcknzxw', 'Estiramientos de cadera, giros de torso'),
-    ('HIIT de Potencia', 'Desarrollar fuerza explosiva', 'Aumentar la potencia y rapidez', 'https://youtu.be/2PVk2wUY04k?si=LvnFcYFsXqcknzxw', 'Saltos pliométricos, sprints de 30 segundos');
+INSERT INTO planEjercicio (titulo, motivo, objetivo, video, proceso) VALUES
+('Plan de Pérdida de Peso', 'Perder peso de forma saludable', 'Bajar 5 kg en 2 meses', 'https://youtu.be/5uFpo7KHOrI?si=Vu_0LtMkao5jLmwc', 'Ejercicios de cardio 30 min, 5 días a la semana'),
+('Plan de Fuerza Total', 'Aumentar masa muscular', 'Ganar 3 kg de masa muscular en 3 meses', 'https://youtu.be/UqB65gs_Lr0?si=31FJNS3ipK_j89z5', 'Entrenamiento de fuerza 4 días a la semana'),
+('Plan de Resistencia', 'Prepararse para correr una carrera de 10 km', 'Correr 10 km en menos de 60 min', 'https://youtu.be/aKHar4U2Iys?si=NsBMp8ELjR2uk5-a', 'Entrenamiento de resistencia 5 días a la semana'),
+('Plan de Flexibilidad', 'Mejorar la flexibilidad y el rango de movimiento', 'Realizar el split completo en 3 meses', 'https://youtu.be/cwH52piEl8A?si=JQVF9yCeLVkDbYLD', 'Ejercicios de estiramiento 5 días a la semana'),
+('Plan de HIIT', 'Entrenamiento de alta intensidad para quemar grasa', 'Bajar 2 kg en 1 mes', 'https://youtu.be/cwH52piEl8A?si=JQVF9yCeLVkDbYLD', 'HIIT 4 veces a la semana'),
+('Plan de Entrenamiento Funcional', 'Mejorar fuerza y resistencia para actividades diarias', 'Aumentar la energía en las tareas diarias', 'https://youtu.be/aKHar4U2Iys?si=NsBMp8ELjR2uk5-a', 'Entrenamiento funcional 3 días a la semana'),
+('Plan de Yoga', 'Aumentar la flexibilidad y reducir el estrés', 'Practicar yoga 3 veces a la semana', 'https://youtu.be/0Grvq1Kz6L8?si=Orpd0OAFTTaGtUOU', 'Sesiones de 1 hora, 3 veces por semana'),
+('Plan de Natación', 'Mejorar la técnica y resistencia en natación', 'Nadar 1 km sin parar', 'https://youtu.be/2PVk2wUY04k?si=04JLMg41I6zrGqrN', 'Entrenamiento de natación 2 días a la semana');
+
 """.trimIndent()
         )
 
         db?.execSQL(
             """
-    INSERT INTO rutina (titulo, id_planAlimentacion) VALUES
-    ('Rutina de Pérdida de Peso', 1),
-    ('Rutina de Tonificación', 2),
-    ('Rutina de Ganancia de Masa Muscular', 3),
-    ('Rutina de Mejora de Resistencia', 4),
-    ('Rutina de Mantenimiento', 5);
+INSERT INTO plan_categoria (id_categoriaEjer, id_planEjercicio) VALUES
+(1, 1), -- Cardio -> Plan de Pérdida de Peso
+(2, 2), -- Fuerza -> Plan de Fuerza Total
+(4, 3), -- Resistencia -> Plan de Resistencia
+(3, 4), -- Flexibilidad -> Plan de Flexibilidad
+(8, 5), -- HIIT -> Plan de HIIT
+(5, 6), -- Entrenamiento funcional -> Plan de Entrenamiento Funcional
+(7, 7), -- Yoga -> Plan de Yoga
+(9, 8); -- Ciclismo -> Plan de Natación
+
 """.trimIndent()
         )
 
         db?.execSQL(
             """
-    INSERT INTO plan_categoria (id_categoriaEjer, id_planEjercicio) VALUES
-    (1, 1),
-    (2, 2),
-    (4, 3),
-    (5, 4),
-    (6, 5),
-    (7, 6);
+INSERT INTO rutina (titulo, id_planAlimentacion) VALUES
+('Rutina de Pérdida de Peso', 1), 
+('Rutina de Fuerza Total', 2), 
+('Rutina de Resistencia', 3), 
+('Rutina de Flexibilidad', 4), 
+('Rutina de HIIT', 5), 
+('Rutina Funcional', 6), 
+('Rutina de Yoga', 7), 
+('Rutina de Natación', 8), 
+('Rutina de Ciclismo', 9), 
+('Rutina de Entrenamiento en Casa', 1);
+
 """.trimIndent()
         )
 
         db?.execSQL(
             """
-    INSERT INTO rutina_ejercicio (id_rutina, id_planEjercicio) VALUES
-    (1, 1),
-    (2, 4),
-    (3, 2),
-    (4, 1),
-    (5, 5);
+INSERT INTO rutina_ejercicio (id_rutina, id_planEjercicio) VALUES
+(1, 1), -- Rutina de Pérdida de Peso -> Plan de Pérdida de Peso
+(2, 2), -- Rutina de Fuerza Total -> Plan de Fuerza Total
+(3, 3), -- Rutina de Resistencia -> Plan de Resistencia
+(4, 4), -- Rutina de Flexibilidad -> Plan de Flexibilidad
+(5, 5), -- Rutina de HIIT -> Plan de HIIT
+(6, 6), -- Rutina Funcional -> Plan de Entrenamiento Funcional
+(7, 7), -- Rutina de Yoga -> Plan de Yoga
+(8, 8), -- Rutina de Natación -> Plan de Natación
+(9, 9), -- Rutina de Ciclismo -> Plan de Ciclismo
+(10, 1); -- Rutina de Entrenamiento en Casa -> Plan de Pérdida de Peso
+
 """.trimIndent()
         )
 
