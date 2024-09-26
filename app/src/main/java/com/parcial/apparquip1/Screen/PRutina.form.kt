@@ -1,6 +1,5 @@
-package com.parcial.apparquip1.Presentacion
+package com.parcial.apparquip1.Screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -43,20 +42,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
-import com.parcial.apparquip1.Datos.Alimentacion
-import com.parcial.apparquip1.Datos.PlanEjercicio
-import androidx.compose.material3.Scaffold
+import com.parcial.apparquip1.Datos.entidades.Alimentacion
+import com.parcial.apparquip1.Datos.entidades.PlanEjercicio
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.text.style.TextOverflow
-import com.parcial.apparquip1.Datos.Rutina
+import com.parcial.apparquip1.Datos.entidades.Rutina
 import com.parcial.apparquip1.DialogoCustom
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PRutina(navController: NavHostController, screenWidth: Dp, screenHeight: Dp) {
     val context = LocalContext.current
-    val pRutina = PRutina(context)
+    val pRutina = com.parcial.apparquip1.Presentacion.PRutina(context)
     val focusManager = LocalFocusManager.current
 
     var isCreate by remember { mutableStateOf(true) }
@@ -262,26 +260,19 @@ fun PRutina(navController: NavHostController, screenWidth: Dp, screenHeight: Dp)
                                             dialogAbierto = true
                                             return@Button
                                         }
+                                        pRutina.id = id
+                                        pRutina.titulo = titulo
+                                        pRutina.idPlanAlimentacion = selectPlanAlimentacion
+                                        pRutina.idPlanesEjercicios = selectPlanesEjercicios
+                                        pRutina.rutina = Rutina(
+                                            id = id,
+                                            titulo = titulo,
+                                            idPlanAlimentacion = selectPlanAlimentacion
+                                        )
                                         if (isCreate) {
-                                            messageText = pRutina.insertarRutina(
-                                                selectPlanAlimentacion,
-                                                selectPlanesEjercicios,
-                                                Rutina(
-                                                    id = 0,
-                                                    titulo = titulo,
-                                                    idPlanAlimentacion = selectPlanAlimentacion
-                                                )
-                                            )
+                                            messageText = pRutina.insertarRutina()
                                         } else {
-                                            messageText = pRutina.actualizarRutina(
-                                                selectPlanAlimentacion,
-                                                selectPlanesEjercicios,
-                                                Rutina(
-                                                    id = id,
-                                                    titulo = titulo,
-                                                    idPlanAlimentacion = selectPlanAlimentacion
-                                                )
-                                            )
+                                            messageText = pRutina.actualizarRutina()
                                         }
 
                                         focusManager.clearFocus()
@@ -437,8 +428,8 @@ fun PRutina(navController: NavHostController, screenWidth: Dp, screenHeight: Dp)
                                                     ) // Change the color here
                                                 }
                                                 IconButton(onClick = {
-                                                    id = rutinas[index].id
-                                                    pRutina.eliminarRutina(id)
+                                                    pRutina.id = rutinas[index].id
+                                                    pRutina.eliminarRutina()
                                                     rutinas = pRutina.obtenerRutinas()
                                                 }) {
                                                     Icon(

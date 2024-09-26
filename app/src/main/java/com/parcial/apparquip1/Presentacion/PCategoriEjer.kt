@@ -1,16 +1,17 @@
 package com.parcial.apparquip1.Presentacion
 
 import android.content.Context
-import com.parcial.apparquip1.Datos.Alimentacion
-import com.parcial.apparquip1.Datos.CategoriaEjer
-import com.parcial.apparquip1.Datos.PlanEjercicio
+import com.parcial.apparquip1.Datos.entidades.CategoriaEjer
+import com.parcial.apparquip1.Datos.entidades.PlanEjercicio
 import com.parcial.apparquip1.Negocio.NCategoriaEjer
-import com.parcial.apparquip1.Negocio.NPlanEjercicio
 
 class PCategoriEjer(context: Context) {
     private val nCategoriEjer: NCategoriaEjer = NCategoriaEjer(context)
+    var id: Int = 0
+    var nombre: String = ""
+    var descripcion: String = ""
 
-    fun insertarCategoriaEjer(nombre: String, descripcion: String): String {
+    fun insertarCategoriaEjer(): String {
         return nCategoriEjer.insertarCategoriaEjer(nombre, descripcion)
     }
 
@@ -18,15 +19,15 @@ class PCategoriEjer(context: Context) {
         return nCategoriEjer.obtenerCategoriasEjer()
     }
 
-    fun actualizarCategoriaEjer(id: Int, nombre: String, descripcion: String): String {
+    fun actualizarCategoriaEjer(): String {
         return nCategoriEjer.actualizarCategoriaEjer(id, nombre, descripcion)
     }
 
-    fun eliminarCategoriaEjer(id: Int): String {
+    fun eliminarCategoriaEjer(): String {
         return nCategoriEjer.eliminarCategoriaEjer(id)
     }
 
-    fun getRelacionOfCategoriaEjer(idCategoriaEjercicio: Int): List<PlanEjercicio> {
-        return nCategoriEjer.getRelacionOfCategoriaEjer(idCategoriaEjercicio)
+    fun getRelacionOfCategoriaEjer(): List<PlanEjercicio> {
+        return nCategoriEjer.getRelacionOfCategoriaEjer(id)
     }
 }

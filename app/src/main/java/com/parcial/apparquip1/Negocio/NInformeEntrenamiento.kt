@@ -1,9 +1,9 @@
 package com.parcial.apparquip1.Negocio
 
 import android.content.ActivityNotFoundException
-import com.parcial.apparquip1.Datos.Alimentacion
+import com.parcial.apparquip1.Datos.entidades.Alimentacion
 import com.parcial.apparquip1.Datos.DInformeEntrenamiento
-import com.parcial.apparquip1.Datos.PlanEjercicio
+import com.parcial.apparquip1.Datos.entidades.PlanEjercicio
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
@@ -28,14 +28,16 @@ class NInformeEntrenamiento(context: Context) {
         if (idRutina <= 0) {
             return null
         }
-        return dInformeEntrenamiento.getPlanAlimentacionPorRutina(idRutina)
+        dInformeEntrenamiento.idRutina = idRutina
+        return dInformeEntrenamiento.getPlanAlimentacionPorRutina()
     }
 
     fun getPlanesEjerciciosPorRutina(idRutina: Int): List<PlanEjercicio> {
         if (idRutina <= 0) {
             return emptyList()
         }
-        return dInformeEntrenamiento.getPlanesEjerciciosPorRutina(idRutina)
+        dInformeEntrenamiento.idRutina = idRutina
+        return dInformeEntrenamiento.getPlanesEjerciciosPorRutina()
     }
 
     fun generarPdf(

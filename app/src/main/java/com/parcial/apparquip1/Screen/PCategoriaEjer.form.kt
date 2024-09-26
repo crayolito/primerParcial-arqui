@@ -1,9 +1,5 @@
-package com.parcial.apparquip1.Presentacion
+package com.parcial.apparquip1.Screen
 
-
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -19,22 +15,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,48 +31,43 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
-import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.parcial.apparquip1.Datos.Alimentacion
-import com.parcial.apparquip1.Datos.Cliente
+import com.parcial.apparquip1.Datos.entidades.CategoriaEjer
 import com.parcial.apparquip1.DialogoCustom
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PAlimentacion(navController: NavHostController, screenWidth: Dp, screenHeight: Dp) {
+fun PCategoriEjer(navController: NavHostController, screenWidth: Dp, screenHeight: Dp) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    val pAlimentacion = PAlimentacion(context)
+    val pCategoriaEjer = com.parcial.apparquip1.Presentacion.PCategoriEjer(context)
     var isCreate by remember { mutableStateOf(true) }
     val focusManager = LocalFocusManager.current
     var id: Int by remember { mutableStateOf(0) }
-    var titulo: String by remember { mutableStateOf("") }
+    var nombre: String by remember { mutableStateOf("") }
     var descripcion: String by remember { mutableStateOf("\n") }
-    var ali_no_procesados: String by remember { mutableStateOf("\n") }
-    var ali_procesados by remember { mutableStateOf("\n") }
-    var planesAlimentacion: List<Alimentacion> by remember { mutableStateOf(pAlimentacion.obtenerAlimentos()) }
+    var categoriasEjer: List<CategoriaEjer> by remember { mutableStateOf(pCategoriaEjer.obtenerCategoriasEjer()) }
 
     var cantRelacion: Int by remember { mutableStateOf(0) }
 
     // DIALOGO DE ALERTA
     var dialogAbierto by rememberSaveable { mutableStateOf(false) }
-    DialogoCustom(messageText = "No se puede eliminar el plan de alimentacion, tiene $cantRelacion rutinas asociadas",
+    DialogoCustom(messageText = "No se puede eliminar la categoria, tiene $cantRelacion planes de ejercicio relacionados",
         show = dialogAbierto,
         onDismissRequest = { dialogAbierto = false })
+
 
     Scaffold(content = { paddingValues ->
         Box(
@@ -109,30 +93,30 @@ fun PAlimentacion(navController: NavHostController, screenWidth: Dp, screenHeigh
                         .weight(0.6f)
                         .fillMaxWidth()
                 ) {
-                    // FORMULARIO DE PLAN ALIMENTACION
+                    // FORMULARIO  CATEGORIA DE EJERCICIO
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Text(
-                            text = if (isCreate) "Crear Plan Alimentacion" else "Editar Plan Alimentacion",
+                            text = if (isCreate) "Crear Categoria Ejercicio" else "Editar Categoria Ejercicio",
                             style = MaterialTheme.typography.titleLarge,
                         )
                         TextField(
                             modifier = Modifier.fillMaxWidth(),
-                            value = titulo,
+                            value = nombre,
                             label = {
                                 Text(
-                                    text = "Titulo del plan ALimen.",
+                                    text = "Titulo de la Categoria",
                                     style = MaterialTheme.typography.titleSmall
                                 )
                             },
                             textStyle = MaterialTheme.typography.titleMedium,
                             leadingIcon = {
-                                Icon(Icons.Filled.DateRange, contentDescription = "Icono de titulo")
+                                Icon(Icons.Filled.Person, contentDescription = "Icono de persona")
                             },
                             singleLine = true,
-                            onValueChange = { titulo = it },
+                            onValueChange = { nombre = it },
                             shape = RoundedCornerShape(9.dp, 9.dp, 0.dp, 0.dp)
                         )
                         TextField(
@@ -140,59 +124,16 @@ fun PAlimentacion(navController: NavHostController, screenWidth: Dp, screenHeigh
                             value = descripcion,
                             label = {
                                 Text(
-                                    text = "Motivo de la dieta",
+                                    text = "Descripcion de la Categoria",
                                     style = MaterialTheme.typography.titleSmall
                                 )
                             },
                             textStyle = MaterialTheme.typography.titleMedium,
                             leadingIcon = {
-                                Icon(
-                                    Icons.Filled.Notifications,
-                                    contentDescription = "Icono de motivo"
-                                )
+                                Icon(Icons.Filled.Star, contentDescription = "Icono de telefono")
                             },
                             maxLines = 2,
                             onValueChange = { descripcion = it },
-                            shape = RoundedCornerShape(9.dp, 9.dp, 0.dp, 0.dp)
-                        )
-                        TextField(
-                            modifier = Modifier.fillMaxWidth(),
-                            value = ali_no_procesados,
-                            label = {
-                                Text(
-                                    text = "Alimentos no procesados",
-                                    style = MaterialTheme.typography.titleSmall
-                                )
-                            },
-                            textStyle = MaterialTheme.typography.titleMedium,
-                            leadingIcon = {
-                                Icon(
-                                    Icons.Filled.Menu,
-                                    contentDescription = "Icono de ali_no_procesados"
-                                )
-                            },
-                            maxLines = 2,
-                            onValueChange = { ali_no_procesados = it },
-                            shape = RoundedCornerShape(9.dp, 9.dp, 0.dp, 0.dp)
-                        )
-                        TextField(
-                            modifier = Modifier.fillMaxWidth(),
-                            value = ali_procesados,
-                            label = {
-                                Text(
-                                    text = "Alimentos procesados",
-                                    style = MaterialTheme.typography.titleSmall
-                                )
-                            },
-                            textStyle = MaterialTheme.typography.titleMedium,
-                            leadingIcon = {
-                                Icon(
-                                    Icons.Filled.Menu,
-                                    contentDescription = "Icono de ali_procesados"
-                                )
-                            },
-                            maxLines = 2,
-                            onValueChange = { ali_procesados = it },
                             shape = RoundedCornerShape(9.dp, 9.dp, 0.dp, 0.dp)
                         )
                         Row(
@@ -202,33 +143,20 @@ fun PAlimentacion(navController: NavHostController, screenWidth: Dp, screenHeigh
 
                             Button(
                                 onClick = {
+                                    pCategoriaEjer.id = id
+                                    pCategoriaEjer.nombre = nombre
+                                    pCategoriaEjer.descripcion = descripcion
                                     if (isCreate) {
-                                        println(
-                                            pAlimentacion.insertarAlimento(
-                                                titulo,
-                                                descripcion,
-                                                ali_no_procesados,
-                                                ali_procesados
-                                            )
-                                        )
+
+                                        pCategoriaEjer.insertarCategoriaEjer()
                                     } else {
-                                        println(
-                                            pAlimentacion.actualizarAlimento(
-                                                id,
-                                                titulo,
-                                                descripcion,
-                                                ali_no_procesados,
-                                                ali_procesados
-                                            )
-                                        )
+                                        pCategoriaEjer.actualizarCategoriaEjer()
                                     }
-                                    planesAlimentacion = pAlimentacion.obtenerAlimentos()
+                                    categoriasEjer = pCategoriaEjer.obtenerCategoriasEjer()
                                     focusManager.clearFocus()
                                     id = 0
-                                    titulo = ""
+                                    nombre = ""
                                     descripcion = "\n"
-                                    ali_no_procesados = "\n"
-                                    ali_procesados = "\n"
                                 },
                                 shape = RoundedCornerShape(5.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -246,10 +174,8 @@ fun PAlimentacion(navController: NavHostController, screenWidth: Dp, screenHeigh
                                 onClick = {
                                     focusManager.clearFocus()
                                     isCreate = true
-                                    titulo = ""
+                                    nombre = ""
                                     descripcion = "\n"
-                                    ali_no_procesados = "\n"
-                                    ali_procesados = "\n"
                                 },
                                 shape = RoundedCornerShape(5.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -267,10 +193,8 @@ fun PAlimentacion(navController: NavHostController, screenWidth: Dp, screenHeigh
                                 onClick = {
                                     focusManager.clearFocus()
                                     id = 0
-                                    titulo = ""
+                                    nombre = ""
                                     descripcion = "\n"
-                                    ali_no_procesados = "\n"
-                                    ali_procesados = "\n"
                                 },
                                 shape = RoundedCornerShape(5.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -314,22 +238,22 @@ fun PAlimentacion(navController: NavHostController, screenWidth: Dp, screenHeigh
 
                         ) {
                         Text(
-                            text = "Lista planes de alimentacion",
+                            text = "Lista de Categorias Ejerc.",
                             style = MaterialTheme.typography.titleLarge,
                         )
-                        if (planesAlimentacion.isEmpty()) {
+                        if (categoriasEjer.isEmpty()) {
                             Box(
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = "No hay planes de alimentacion",
+                                    text = "No hay categorias registradas",
                                     style = MaterialTheme.typography.titleMedium
                                 )
                             }
                         } else {
                             LazyColumn() {
-                                items(planesAlimentacion.size) { index ->
+                                items(categoriasEjer.size) { index ->
                                     Column(
                                         modifier = Modifier.padding(bottom = screenHeight * 0.01f)
                                     ) {
@@ -344,13 +268,13 @@ fun PAlimentacion(navController: NavHostController, screenWidth: Dp, screenHeigh
                                                 ), verticalArrangement = Arrangement.Center
                                             ) {
                                                 Text(
-                                                    text = planesAlimentacion[index].titulo,
+                                                    text = categoriasEjer[index].nombre,
                                                     overflow = TextOverflow.Ellipsis,
                                                     maxLines = 1,
                                                     style = MaterialTheme.typography.titleMedium
                                                 )
                                                 Text(
-                                                    text = planesAlimentacion[index].descripcion,
+                                                    text = categoriasEjer[index].descripcion,
                                                     overflow = TextOverflow.Ellipsis,
                                                     maxLines = 1,
                                                     style = MaterialTheme.typography.titleMedium
@@ -365,14 +289,9 @@ fun PAlimentacion(navController: NavHostController, screenWidth: Dp, screenHeigh
                                             ) {
                                                 IconButton(onClick = {
                                                     isCreate = false
-                                                    id = planesAlimentacion[index].id
-                                                    titulo = planesAlimentacion[index].titulo
-                                                    descripcion =
-                                                        planesAlimentacion[index].descripcion
-                                                    ali_no_procesados =
-                                                        planesAlimentacion[index].noprocesado
-                                                    ali_procesados =
-                                                        planesAlimentacion[index].procesado
+                                                    id = categoriasEjer[index].id
+                                                    nombre = categoriasEjer[index].nombre
+                                                    descripcion = categoriasEjer[index].descripcion
                                                 }) {
                                                     Icon(
                                                         Icons.Filled.Edit,
@@ -381,15 +300,16 @@ fun PAlimentacion(navController: NavHostController, screenWidth: Dp, screenHeigh
                                                     ) // Change the color here
                                                 }
                                                 IconButton(onClick = {
-                                                    id = planesAlimentacion[index].id
+                                                    id = categoriasEjer[index].id
+                                                    pCategoriaEjer.id = id
                                                     cantRelacion =
-                                                        pAlimentacion.getRelacionOfRutina(id).size
+                                                        pCategoriaEjer.getRelacionOfCategoriaEjer().size
                                                     if (cantRelacion > 0) {
                                                         dialogAbierto = true
                                                     } else {
-                                                        pAlimentacion.eliminarAlimento(id)
-                                                        planesAlimentacion =
-                                                            pAlimentacion.obtenerAlimentos()
+                                                        pCategoriaEjer.eliminarCategoriaEjer()
+                                                        categoriasEjer =
+                                                            pCategoriaEjer.obtenerCategoriasEjer()
                                                     }
                                                 }) {
                                                     Icon(

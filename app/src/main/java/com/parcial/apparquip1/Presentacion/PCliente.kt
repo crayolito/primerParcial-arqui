@@ -1,20 +1,20 @@
 package com.parcial.apparquip1.Presentacion
 
 import android.content.Context
-import com.parcial.apparquip1.Datos.Cliente
+import com.parcial.apparquip1.Datos.entidades.Cliente
 import com.parcial.apparquip1.Negocio.NCliente
-import kotlinx.coroutines.runBlocking
 
 
 class PCliente(context: Context) {
     private val nCliente: NCliente = NCliente(context)
 
-    fun insertarCliente(
-        nombre: String,
-        telefono: String,
-        meta: String,
-        caracteristicas: String
-    ): String {
+    var id: Int = 0
+    var nombre: String = ""
+    var telefono: String = ""
+    var meta: String = ""
+    var caracteristicas: String = ""
+
+    fun insertarCliente(): String {
         return nCliente.insertarCliente(
             nombre,
             telefono,
@@ -27,13 +27,7 @@ class PCliente(context: Context) {
         return nCliente.obtenerClientes()
     }
 
-    fun actualizarCliente(
-        id : Int,
-        nombre: String,
-        telefono: String,
-        meta: String,
-        caracteristicas: String
-    ): String {
+    fun actualizarCliente(): String {
         return nCliente.actualizarCliente(
             id,
             nombre,
@@ -43,7 +37,7 @@ class PCliente(context: Context) {
         );
     }
 
-    fun eliminarCliente(id: Int): String {
+    fun eliminarCliente(): String {
         return   nCliente.eliminarCliente(id)
     }
 }

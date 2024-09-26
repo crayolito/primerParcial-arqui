@@ -1,10 +1,5 @@
-package com.parcial.apparquip1.Presentacion
+package com.parcial.apparquip1.Screen
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -13,29 +8,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.ThumbUp
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -49,60 +38,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Canvas
-import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
-import com.parcial.apparquip1.Datos.CategoriaEjer
-import com.parcial.apparquip1.Datos.PlanEjercicio
-import java.io.File
-import java.io.FileOutputStream
-import android.text.format.DateFormat
-import com.parcial.apparquip1.DialogoCustom
-import java.util.Date
-
+import com.parcial.apparquip1.Datos.entidades.Cliente
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PPlanEjercicio(navController: NavHostController, screenWidth: Dp, screenHeight: Dp) {
+fun PCliente(navController: NavHostController, screenWidth: Dp, screenHeight: Dp) {
     val context = LocalContext.current
-    val pPlanEjercicio = PPlanEjercicio(context)
+    val pCliente = com.parcial.apparquip1.Presentacion.PCliente(context)
     var isCreate by remember { mutableStateOf(true) }
     val focusManager = LocalFocusManager.current
     var id: Int by remember { mutableStateOf(0) }
-    var titulo by remember { mutableStateOf("") }
-    var video by remember { mutableStateOf("") }
-    var objetivo by remember { mutableStateOf("") }
-    var motivo by remember { mutableStateOf("Buen Motivo") }
-    var proceso by remember { mutableStateOf("") }
-    var planesEjercicio: List<PlanEjercicio> by remember { mutableStateOf(pPlanEjercicio.obtenerPlanesEjercicio()) }
-
-    var cantRelacion: Int by remember { mutableStateOf(0) }
-
-    // DROPDOWN PERSONALIZADO
-    var categoriasEjercicio: List<CategoriaEjer> by remember { mutableStateOf(pPlanEjercicio.obtenerCategoriasEjer()) }
-    var isExpanded by remember { mutableStateOf(false) }
-    var selectedCE by remember { mutableStateOf(if (categoriasEjercicio.isNotEmpty()) categoriasEjercicio[0].nombre else "No hay categorias añadidas") }
-    val icon = if (isExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
-    var idCategoriaEjercicio: Int by remember {
-        mutableStateOf(
-            categoriasEjercicio.getOrNull(0)?.id ?: 0
-        )
-    }
-
-    // DIALOGO DE ALERTA
-    var dialogAbierto by rememberSaveable { mutableStateOf(false) }
-    var messageText: String by remember { mutableStateOf("No hay categorias de ejercicio registradas, por favor añada") }
-    DialogoCustom(messageText = messageText,
-        show = dialogAbierto,
-        onDismissRequest = { dialogAbierto = false })
+    var nombre by remember { mutableStateOf("") }
+    var telefono by remember { mutableStateOf("") }
+    var meta by remember { mutableStateOf("\n") }
+    var caracteristicas by remember { mutableStateOf("\n") }
+    var clientes: List<Cliente> by remember { mutableStateOf(pCliente.obtenerClientes()) }
 
     Scaffold(content = { paddingValues ->
         Box(
@@ -125,158 +81,109 @@ fun PPlanEjercicio(navController: NavHostController, screenWidth: Dp, screenHeig
             ) {
                 Box(
                     modifier = Modifier
-                        .weight(0.60f)
+                        .weight(0.6f)
                         .fillMaxWidth()
                 ) {
-                    // FORMULARIO DE Planes de Ejercicio
+                    // FORMULARIO DE CLIENTE
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Text(
-                            text = if (isCreate) "Crear plan ejercicio" else "Editar plan ejercicio",
+                            text = if (isCreate) "Crear Cliente" else "Editar Cliente",
                             style = MaterialTheme.typography.titleLarge,
                         )
                         TextField(modifier = Modifier.fillMaxWidth(),
-                            value = titulo,
+                            value = nombre,
                             label = {
                                 Text(
-                                    text = "Titulo del plan",
+                                    text = "Nombre Completo",
                                     style = MaterialTheme.typography.titleSmall
                                 )
                             },
                             textStyle = MaterialTheme.typography.titleMedium,
                             leadingIcon = {
-                                Icon(Icons.Filled.Star, contentDescription = "Icono de persona")
+                                Icon(Icons.Filled.Person, contentDescription = "Icono de persona")
                             },
                             singleLine = true,
-                            onValueChange = { titulo = it },
+                            onValueChange = { nombre = it },
                             shape = RoundedCornerShape(9.dp, 9.dp, 0.dp, 0.dp)
                         )
                         TextField(modifier = Modifier.fillMaxWidth(),
-                            value = video,
+                            value = telefono,
                             label = {
                                 Text(
-                                    text = "Video informativo",
-                                    style = MaterialTheme.typography.titleSmall
+                                    text = "Telefono", style = MaterialTheme.typography.titleSmall
                                 )
                             },
                             textStyle = MaterialTheme.typography.titleMedium,
                             leadingIcon = {
-                                Icon(Icons.Filled.Share, contentDescription = "Icono de persona")
+                                Icon(Icons.Filled.Phone, contentDescription = "Icono de telefono")
                             },
                             singleLine = true,
-                            onValueChange = { video = it },
+                            onValueChange = { telefono = it },
                             shape = RoundedCornerShape(9.dp, 9.dp, 0.dp, 0.dp)
                         )
                         TextField(modifier = Modifier.fillMaxWidth(),
-                            value = objetivo,
+                            value = meta,
                             label = {
                                 Text(
-                                    text = "Objetivo del plan",
+                                    text = "Meta Personal",
                                     style = MaterialTheme.typography.titleSmall
                                 )
                             },
                             textStyle = MaterialTheme.typography.titleMedium,
                             leadingIcon = {
-                                Icon(Icons.Filled.Build, contentDescription = "Icono de persona")
+                                Icon(Icons.Filled.Star, contentDescription = "Icono de telefono")
                             },
-                            singleLine = true,
-                            onValueChange = { objetivo = it },
+                            maxLines = 2,
+                            onValueChange = { meta = it },
                             shape = RoundedCornerShape(9.dp, 9.dp, 0.dp, 0.dp)
                         )
                         TextField(modifier = Modifier.fillMaxWidth(),
-                            value = proceso,
+                            value = caracteristicas,
                             label = {
                                 Text(
-                                    text = "Proceso duracion y repeticiones",
+                                    text = "Peso, Altura y Edad",
                                     style = MaterialTheme.typography.titleSmall
                                 )
                             },
                             textStyle = MaterialTheme.typography.titleMedium,
                             leadingIcon = {
-                                Icon(Icons.Filled.Build, contentDescription = "Icono de persona")
+                                Icon(Icons.Filled.Star, contentDescription = "Icono de telefono")
                             },
-                            singleLine = true,
-                            onValueChange = { proceso = it },
+                            maxLines = 2,
+                            onValueChange = { caracteristicas = it },
                             shape = RoundedCornerShape(9.dp, 9.dp, 0.dp, 0.dp)
                         )
-                        Column(
-                            modifier = Modifier
-                                .size(
-                                    screenWidth, screenHeight * 0.07f
-                                )
-                                .fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            TextField(modifier = Modifier
-                                .size(
-                                    screenWidth, screenHeight * 0.07f
-                                )
-                                .fillMaxSize(),
-                                value = selectedCE,
-                                textStyle = MaterialTheme.typography.titleMedium,
-                                readOnly = true,
-                                onValueChange = { },
-                                trailingIcon = {
-                                    IconButton(onClick = { isExpanded = !isExpanded }) {
-                                        Icon(icon, contentDescription = null)
-                                    }
-                                })
-                            DropdownMenu(
-                                expanded = isExpanded,
-                                onDismissRequest = { isExpanded = false },
-                                modifier = Modifier.heightIn(max = 200.dp)
-                            ) {
-                                categoriasEjercicio.forEach { categoria ->
-                                    DropdownMenuItem(text = {
-                                        Text(
-                                            text = categoria.nombre,
-                                            style = MaterialTheme.typography.titleMedium.copy(
-                                                color = MaterialTheme.colorScheme.onSurface
-                                            )
-                                        )
-                                    }, onClick = {
-                                        selectedCE = categoria.nombre
-                                        idCategoriaEjercicio = categoria.id
-                                        isExpanded = false
-                                    })
-                                }
-                            }
-                        }
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
+
                             Button(
                                 onClick = {
-                                    if (categoriasEjercicio.isNotEmpty()) {
-                                        if (isCreate) {
-                                            pPlanEjercicio.insertarPlanEjercicio(
-                                                idCategoriaEjercicio,
-                                                titulo,
-                                                motivo,
-                                                objetivo,
-                                                video,
-                                                proceso
-                                            )
-                                        } else {
-                                            pPlanEjercicio.actualizarPlanEjercicio(
-                                                idCategoriaEjercicio, id, titulo, motivo, objetivo, video, proceso
-                                            )
-                                        }
-                                        planesEjercicio = pPlanEjercicio.obtenerPlanesEjercicio()
+                                    if (isCreate) {
+                                        pCliente.nombre = nombre
+                                        pCliente.telefono = telefono
+                                        pCliente.meta = meta
+                                        pCliente.caracteristicas = caracteristicas
+                                        pCliente.insertarCliente()
                                     } else {
-                                        messageText =
-                                            "No hay categorias de ejercicio registradas, por favor añada."
-                                        dialogAbierto = true
+                                        pCliente.id = id
+                                        pCliente.nombre = nombre
+                                        pCliente.telefono = telefono
+                                        pCliente.meta = meta
+                                        pCliente.caracteristicas = caracteristicas
+                                            pCliente.actualizarCliente()
                                     }
+                                    clientes = pCliente.obtenerClientes()
                                     focusManager.clearFocus()
                                     id = 0
-                                    titulo = ""
-                                    video = ""
-                                    objetivo = ""
-                                    proceso = ""
+                                    nombre = ""
+                                    telefono = ""
+                                    meta = "\n"
+                                    caracteristicas = "\n"
                                 },
                                 shape = RoundedCornerShape(5.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -294,10 +201,10 @@ fun PPlanEjercicio(navController: NavHostController, screenWidth: Dp, screenHeig
                                 onClick = {
                                     focusManager.clearFocus()
                                     isCreate = true
-                                    titulo = ""
-                                    video = ""
-                                    objetivo = ""
-                                    proceso = ""
+                                    nombre = ""
+                                    telefono = ""
+                                    meta = "\n"
+                                    caracteristicas = "\n"
                                 },
                                 shape = RoundedCornerShape(5.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -313,13 +220,12 @@ fun PPlanEjercicio(navController: NavHostController, screenWidth: Dp, screenHeig
                             }
                             Button(
                                 onClick = {
-
                                     focusManager.clearFocus()
                                     id = 0
-                                    titulo = ""
-                                    video = ""
-                                    objetivo = ""
-                                    proceso = ""
+                                    nombre = ""
+                                    telefono = ""
+                                    meta = "\n"
+                                    caracteristicas = "\n"
                                 },
                                 shape = RoundedCornerShape(5.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -355,7 +261,7 @@ fun PPlanEjercicio(navController: NavHostController, screenWidth: Dp, screenHeig
                 }
                 Box(
                     modifier = Modifier
-                        .weight(0.30f)
+                        .weight(0.4f)
                         .fillMaxWidth()
                 ) {
                     Column(
@@ -363,24 +269,22 @@ fun PPlanEjercicio(navController: NavHostController, screenWidth: Dp, screenHeig
 
                         ) {
                         Text(
-                            text = "Lista planes de ejercicio",
+                            text = "Lista de Clientes",
                             style = MaterialTheme.typography.titleLarge,
                         )
-                        if (planesEjercicio.isEmpty()) {
+                        if (clientes.isEmpty()) {
                             Box(
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = "No hay planes registrados",
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
+                                    text = "No hay clientes registrados",
                                     style = MaterialTheme.typography.titleMedium
                                 )
                             }
                         } else {
                             LazyColumn() {
-                                items(planesEjercicio.size) { index ->
+                                items(clientes.size) { index ->
                                     Column(
                                         modifier = Modifier.padding(bottom = screenHeight * 0.01f)
                                     ) {
@@ -395,13 +299,13 @@ fun PPlanEjercicio(navController: NavHostController, screenWidth: Dp, screenHeig
                                                 ), verticalArrangement = Arrangement.Center
                                             ) {
                                                 Text(
-                                                    text = planesEjercicio[index].titulo,
+                                                    text = clientes[index].nombre,
                                                     overflow = TextOverflow.Ellipsis,
                                                     maxLines = 1,
                                                     style = MaterialTheme.typography.titleMedium
                                                 )
                                                 Text(
-                                                    text = planesEjercicio[index].motivo,
+                                                    text = clientes[index].telefono.toString(),
                                                     overflow = TextOverflow.Ellipsis,
                                                     maxLines = 1,
                                                     style = MaterialTheme.typography.titleMedium
@@ -416,11 +320,12 @@ fun PPlanEjercicio(navController: NavHostController, screenWidth: Dp, screenHeig
                                             ) {
                                                 IconButton(onClick = {
                                                     isCreate = false
-                                                    id = planesEjercicio[index].id
-                                                    titulo = planesEjercicio[index].titulo
-                                                    video = planesEjercicio[index].video
-                                                    objetivo = planesEjercicio[index].objetivo
-                                                    proceso = planesEjercicio[index].proceso
+                                                    id = clientes[index].id
+                                                    nombre = clientes[index].nombre
+                                                    telefono = clientes[index].telefono
+                                                    meta = clientes[index].meta
+                                                    caracteristicas =
+                                                        clientes[index].caracteristicas
                                                 }) {
                                                     Icon(
                                                         Icons.Filled.Edit,
@@ -429,22 +334,9 @@ fun PPlanEjercicio(navController: NavHostController, screenWidth: Dp, screenHeig
                                                     ) // Change the color here
                                                 }
                                                 IconButton(onClick = {
-                                                    id = planesEjercicio[index].id
-                                                    cantRelacion =
-                                                        pPlanEjercicio.getRelacionOfRutina(id).size
-                                                    if (cantRelacion > 0) {
-                                                        messageText =
-                                                            "No se puede eliminar el plan de ejercicio, tiene $cantRelacion rutinas  relacionadas"
-                                                        dialogAbierto = true
-                                                    } else {
-                                                        println(
-                                                            pPlanEjercicio.eliminarPlanEjercicio(
-                                                                planesEjercicio[index].id
-                                                            )
-                                                        )
-                                                        planesEjercicio =
-                                                            pPlanEjercicio.obtenerPlanesEjercicio()
-                                                    }
+                                                    pCliente.id  = clientes[index].id
+                                                    pCliente.eliminarCliente()
+                                                    clientes = pCliente.obtenerClientes()
                                                 }) {
                                                     Icon(
                                                         Icons.Filled.Clear,
@@ -471,8 +363,3 @@ fun PPlanEjercicio(navController: NavHostController, screenWidth: Dp, screenHeig
         }
     })
 }
-
-
-
-
-

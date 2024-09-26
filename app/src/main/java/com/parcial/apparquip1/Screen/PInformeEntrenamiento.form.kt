@@ -1,4 +1,4 @@
-package com.parcial.apparquip1.Presentacion
+package com.parcial.apparquip1.Screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -31,8 +31,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
-import com.parcial.apparquip1.Datos.Cliente
-import com.parcial.apparquip1.Datos.Rutina
+import com.parcial.apparquip1.Datos.entidades.Cliente
+import com.parcial.apparquip1.Datos.entidades.Rutina
 import com.parcial.apparquip1.DialogoCustom
 import com.parcial.apparquip1.R
 
@@ -40,7 +40,7 @@ import com.parcial.apparquip1.R
 @Composable
 fun PInformeEntrenamiento(navController: NavHostController, screenWidth: Dp, screenHeight: Dp) {
     val context = LocalContext.current
-    val pInformeEntrenamiento = PInformeEntrenamiento(context);
+    val pInformeEntrenamiento = com.parcial.apparquip1.Presentacion.PInformeEntrenamiento(context);
     val focusManager = LocalFocusManager.current
     var pdfPath by remember { mutableStateOf<String?>(null) }
 
@@ -241,13 +241,15 @@ fun PInformeEntrenamiento(navController: NavHostController, screenWidth: Dp, scr
                                         }
 
                                         if (pdfPath==null || pdfPath!!.isEmpty()) {
-                                            pdfPath = pInformeEntrenamiento.generarPdf(
+                                            pInformeEntrenamiento.idRutina = selectRutina.id
+                                            pInformeEntrenamiento.alimentacion = pInformeEntrenamiento.getPlanAlimentacionPorRutina()
+                                            pInformeEntrenamiento.ejercicios = pInformeEntrenamiento.getPlanesEjerciciosPorRutina()
+                                            pInformeEntrenamiento.numeroWhatsapp = selectCliente.telefono
+                                            pInformeEntrenamiento.path = pInformeEntrenamiento.generarPdf(
                                                 context,
-                                                pInformeEntrenamiento.getPlanAlimentacionPorRutina(selectRutina.id)!!,
-                                                pInformeEntrenamiento.getPlanesEjerciciosPorRutina(selectRutina.id)
                                             )
                                         }
-                                        pInformeEntrenamiento.abrirPdf(context,pdfPath!!)
+                                        pInformeEntrenamiento.abrirPdf(context)
                                     }
                             )
                             Image(
@@ -259,18 +261,15 @@ fun PInformeEntrenamiento(navController: NavHostController, screenWidth: Dp, scr
                                     )
                                     .clickable {
                                         if (pdfPath==null) {
-                                            pdfPath = pInformeEntrenamiento.generarPdf(
+                                            pInformeEntrenamiento.idRutina = selectRutina.id
+                                            pInformeEntrenamiento.alimentacion = pInformeEntrenamiento.getPlanAlimentacionPorRutina()
+                                            pInformeEntrenamiento.ejercicios = pInformeEntrenamiento.getPlanesEjerciciosPorRutina()
+                                            pInformeEntrenamiento.numeroWhatsapp = selectCliente.telefono
+                                            pInformeEntrenamiento.path = pInformeEntrenamiento.generarPdf(
                                                 context,
-                                                pInformeEntrenamiento.getPlanAlimentacionPorRutina(selectRutina.id)!!,
-                                                pInformeEntrenamiento.getPlanesEjerciciosPorRutina(selectRutina.id)
                                             )
                                         }
-
-                                        pInformeEntrenamiento.compartirPdfWhatsapp(
-                                            context,
-                                            pdfPath ?: "",
-                                            selectCliente.telefono
-                                        )
+                                        pInformeEntrenamiento.compartirPdfWhatsapp(context)
                                     }
                             )
                             Image(

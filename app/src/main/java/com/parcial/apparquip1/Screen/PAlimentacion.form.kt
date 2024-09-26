@@ -1,8 +1,6 @@
-package com.parcial.apparquip1.Presentacion
+package com.parcial.apparquip1.Screen
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -18,19 +16,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,37 +33,44 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.parcial.apparquip1.Datos.Cliente
-import kotlinx.coroutines.launch
+import com.parcial.apparquip1.Datos.entidades.Alimentacion
+import com.parcial.apparquip1.DialogoCustom
+import com.parcial.apparquip1.Presentacion.PAlimentacion
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PCliente(navController: NavHostController, screenWidth: Dp, screenHeight: Dp) {
+fun PAlimentacion(navController: NavHostController, screenWidth: Dp, screenHeight: Dp) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    val pCliente = PCliente(context)
+    val pAlimentacion = PAlimentacion(context)
     var isCreate by remember { mutableStateOf(true) }
     val focusManager = LocalFocusManager.current
     var id: Int by remember { mutableStateOf(0) }
-    var nombre by remember { mutableStateOf("") }
-    var telefono by remember { mutableStateOf("") }
-    var meta by remember { mutableStateOf("\n") }
-    var caracteristicas by remember { mutableStateOf("\n") }
-    var clientes: List<Cliente> by remember { mutableStateOf(pCliente.obtenerClientes()) }
+    var titulo: String by remember { mutableStateOf("") }
+    var descripcion: String by remember { mutableStateOf("\n") }
+    var ali_no_procesados: String by remember { mutableStateOf("\n") }
+    var ali_procesados by remember { mutableStateOf("\n") }
+    var planesAlimentacion: List<Alimentacion> by remember { mutableStateOf(pAlimentacion.obtenerAlimentos()) }
+
+    var cantRelacion: Int by remember { mutableStateOf(0) }
+
+    // DIALOGO DE ALERTA
+    var dialogAbierto by rememberSaveable { mutableStateOf(false) }
+    DialogoCustom(messageText = "No se puede eliminar el plan de alimentacion, tiene $cantRelacion rutinas asociadas",
+        show = dialogAbierto,
+        onDismissRequest = { dialogAbierto = false })
 
     Scaffold(content = { paddingValues ->
         Box(
@@ -94,76 +96,90 @@ fun PCliente(navController: NavHostController, screenWidth: Dp, screenHeight: Dp
                         .weight(0.6f)
                         .fillMaxWidth()
                 ) {
-                    // FORMULARIO DE CLIENTE
+                    // FORMULARIO DE PLAN ALIMENTACION
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Text(
-                            text = if (isCreate) "Crear Cliente" else "Editar Cliente",
+                            text = if (isCreate) "Crear Plan Alimentacion" else "Editar Plan Alimentacion",
                             style = MaterialTheme.typography.titleLarge,
                         )
-                        TextField(modifier = Modifier.fillMaxWidth(),
-                            value = nombre,
+                        TextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = titulo,
                             label = {
                                 Text(
-                                    text = "Nombre Completo",
+                                    text = "Titulo del plan ALimen.",
                                     style = MaterialTheme.typography.titleSmall
                                 )
                             },
                             textStyle = MaterialTheme.typography.titleMedium,
                             leadingIcon = {
-                                Icon(Icons.Filled.Person, contentDescription = "Icono de persona")
+                                Icon(Icons.Filled.DateRange, contentDescription = "Icono de titulo")
                             },
                             singleLine = true,
-                            onValueChange = { nombre = it },
+                            onValueChange = { titulo = it },
                             shape = RoundedCornerShape(9.dp, 9.dp, 0.dp, 0.dp)
                         )
-                        TextField(modifier = Modifier.fillMaxWidth(),
-                            value = telefono,
+                        TextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = descripcion,
                             label = {
                                 Text(
-                                    text = "Telefono", style = MaterialTheme.typography.titleSmall
-                                )
-                            },
-                            textStyle = MaterialTheme.typography.titleMedium,
-                            leadingIcon = {
-                                Icon(Icons.Filled.Phone, contentDescription = "Icono de telefono")
-                            },
-                            singleLine = true,
-                            onValueChange = { telefono = it },
-                            shape = RoundedCornerShape(9.dp, 9.dp, 0.dp, 0.dp)
-                        )
-                        TextField(modifier = Modifier.fillMaxWidth(),
-                            value = meta,
-                            label = {
-                                Text(
-                                    text = "Meta Personal",
+                                    text = "Motivo de la dieta",
                                     style = MaterialTheme.typography.titleSmall
                                 )
                             },
                             textStyle = MaterialTheme.typography.titleMedium,
                             leadingIcon = {
-                                Icon(Icons.Filled.Star, contentDescription = "Icono de telefono")
+                                Icon(
+                                    Icons.Filled.Notifications,
+                                    contentDescription = "Icono de motivo"
+                                )
                             },
                             maxLines = 2,
-                            onValueChange = { meta = it },
+                            onValueChange = { descripcion = it },
                             shape = RoundedCornerShape(9.dp, 9.dp, 0.dp, 0.dp)
                         )
-                        TextField(modifier = Modifier.fillMaxWidth(),
-                            value = caracteristicas,
+                        TextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = ali_no_procesados,
                             label = {
                                 Text(
-                                    text = "Peso, Altura y Edad",
+                                    text = "Alimentos no procesados",
                                     style = MaterialTheme.typography.titleSmall
                                 )
                             },
                             textStyle = MaterialTheme.typography.titleMedium,
                             leadingIcon = {
-                                Icon(Icons.Filled.Star, contentDescription = "Icono de telefono")
+                                Icon(
+                                    Icons.Filled.Menu,
+                                    contentDescription = "Icono de ali_no_procesados"
+                                )
                             },
                             maxLines = 2,
-                            onValueChange = { caracteristicas = it },
+                            onValueChange = { ali_no_procesados = it },
+                            shape = RoundedCornerShape(9.dp, 9.dp, 0.dp, 0.dp)
+                        )
+                        TextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = ali_procesados,
+                            label = {
+                                Text(
+                                    text = "Alimentos procesados",
+                                    style = MaterialTheme.typography.titleSmall
+                                )
+                            },
+                            textStyle = MaterialTheme.typography.titleMedium,
+                            leadingIcon = {
+                                Icon(
+                                    Icons.Filled.Menu,
+                                    contentDescription = "Icono de ali_procesados"
+                                )
+                            },
+                            maxLines = 2,
+                            onValueChange = { ali_procesados = it },
                             shape = RoundedCornerShape(9.dp, 9.dp, 0.dp, 0.dp)
                         )
                         Row(
@@ -174,25 +190,26 @@ fun PCliente(navController: NavHostController, screenWidth: Dp, screenHeight: Dp
                             Button(
                                 onClick = {
                                     if (isCreate) {
-                                        println(
-                                            pCliente.insertarCliente(
-                                                nombre, telefono, meta, caracteristicas
-                                            )
-                                        )
+                                        pAlimentacion.titulo = titulo
+                                        pAlimentacion.descripcion = descripcion
+                                        pAlimentacion.noprocesado = descripcion
+                                        pAlimentacion.procesado= ali_procesados
+                                        pAlimentacion.insertarAlimento()
                                     } else {
-                                        println(
-                                            pCliente.actualizarCliente(
-                                                id, nombre, telefono, meta, caracteristicas
-                                            )
-                                        )
+                                        pAlimentacion.id = id
+                                        pAlimentacion.titulo = titulo
+                                        pAlimentacion.descripcion = descripcion
+                                        pAlimentacion.noprocesado = ali_no_procesados
+                                        pAlimentacion.procesado = ali_procesados
+                                        pAlimentacion.actualizarAlimento()
                                     }
-                                    clientes = pCliente.obtenerClientes()
+                                    planesAlimentacion = pAlimentacion.obtenerAlimentos()
                                     focusManager.clearFocus()
                                     id = 0
-                                    nombre = ""
-                                    telefono = ""
-                                    meta = "\n"
-                                    caracteristicas = "\n"
+                                    titulo = ""
+                                    descripcion = "\n"
+                                    ali_no_procesados = "\n"
+                                    ali_procesados = "\n"
                                 },
                                 shape = RoundedCornerShape(5.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -210,10 +227,10 @@ fun PCliente(navController: NavHostController, screenWidth: Dp, screenHeight: Dp
                                 onClick = {
                                     focusManager.clearFocus()
                                     isCreate = true
-                                    nombre = ""
-                                    telefono = ""
-                                    meta = "\n"
-                                    caracteristicas = "\n"
+                                    titulo = ""
+                                    descripcion = "\n"
+                                    ali_no_procesados = "\n"
+                                    ali_procesados = "\n"
                                 },
                                 shape = RoundedCornerShape(5.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -231,10 +248,10 @@ fun PCliente(navController: NavHostController, screenWidth: Dp, screenHeight: Dp
                                 onClick = {
                                     focusManager.clearFocus()
                                     id = 0
-                                    nombre = ""
-                                    telefono = ""
-                                    meta = "\n"
-                                    caracteristicas = "\n"
+                                    titulo = ""
+                                    descripcion = "\n"
+                                    ali_no_procesados = "\n"
+                                    ali_procesados = "\n"
                                 },
                                 shape = RoundedCornerShape(5.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -278,22 +295,22 @@ fun PCliente(navController: NavHostController, screenWidth: Dp, screenHeight: Dp
 
                         ) {
                         Text(
-                            text = "Lista de Clientes",
+                            text = "Lista planes de alimentacion",
                             style = MaterialTheme.typography.titleLarge,
                         )
-                        if (clientes.isEmpty()) {
+                        if (planesAlimentacion.isEmpty()) {
                             Box(
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = "No hay clientes registrados",
+                                    text = "No hay planes de alimentacion",
                                     style = MaterialTheme.typography.titleMedium
                                 )
                             }
                         } else {
                             LazyColumn() {
-                                items(clientes.size) { index ->
+                                items(planesAlimentacion.size) { index ->
                                     Column(
                                         modifier = Modifier.padding(bottom = screenHeight * 0.01f)
                                     ) {
@@ -308,13 +325,13 @@ fun PCliente(navController: NavHostController, screenWidth: Dp, screenHeight: Dp
                                                 ), verticalArrangement = Arrangement.Center
                                             ) {
                                                 Text(
-                                                    text = clientes[index].nombre,
+                                                    text = planesAlimentacion[index].titulo,
                                                     overflow = TextOverflow.Ellipsis,
                                                     maxLines = 1,
                                                     style = MaterialTheme.typography.titleMedium
                                                 )
                                                 Text(
-                                                    text = clientes[index].telefono.toString(),
+                                                    text = planesAlimentacion[index].descripcion,
                                                     overflow = TextOverflow.Ellipsis,
                                                     maxLines = 1,
                                                     style = MaterialTheme.typography.titleMedium
@@ -329,12 +346,14 @@ fun PCliente(navController: NavHostController, screenWidth: Dp, screenHeight: Dp
                                             ) {
                                                 IconButton(onClick = {
                                                     isCreate = false
-                                                    id = clientes[index].id
-                                                    nombre = clientes[index].nombre
-                                                    telefono = clientes[index].telefono
-                                                    meta = clientes[index].meta
-                                                    caracteristicas =
-                                                        clientes[index].caracteristicas
+                                                    id = planesAlimentacion[index].id
+                                                    titulo = planesAlimentacion[index].titulo
+                                                    descripcion =
+                                                        planesAlimentacion[index].descripcion
+                                                    ali_no_procesados =
+                                                        planesAlimentacion[index].noprocesado
+                                                    ali_procesados =
+                                                        planesAlimentacion[index].procesado
                                                 }) {
                                                     Icon(
                                                         Icons.Filled.Edit,
@@ -343,9 +362,16 @@ fun PCliente(navController: NavHostController, screenWidth: Dp, screenHeight: Dp
                                                     ) // Change the color here
                                                 }
                                                 IconButton(onClick = {
-                                                    println(clientes[index].id)
-                                                    println(pCliente.eliminarCliente(clientes[index].id))
-                                                    clientes = pCliente.obtenerClientes()
+                                                    pAlimentacion.id = planesAlimentacion[index].id
+                                                    cantRelacion =
+                                                        pAlimentacion.getRelacionOfRutina().size
+                                                    if (cantRelacion > 0) {
+                                                        dialogAbierto = true
+                                                    } else {
+                                                        pAlimentacion.eliminarAlimento()
+                                                        planesAlimentacion =
+                                                            pAlimentacion.obtenerAlimentos()
+                                                    }
                                                 }) {
                                                     Icon(
                                                         Icons.Filled.Clear,

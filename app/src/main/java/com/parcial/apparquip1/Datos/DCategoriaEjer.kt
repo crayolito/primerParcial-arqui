@@ -2,16 +2,20 @@ package com.parcial.apparquip1.Datos
 
 import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
+import com.parcial.apparquip1.Datos.entidades.CategoriaEjer
+import com.parcial.apparquip1.Datos.entidades.PlanEjercicio
 
 class DCategoriaEjer(context: Context) {
     private val dConexion: DConexion = DConexion(context)
+    var id: Int = 0
+    var nombre: String = ""
+    var descripcion: String = ""
 
-    fun insertarCategoriaEjer(categoriaEjer: CategoriaEjer): String {
+    fun insertarCategoriaEjer(): String {
         val db = dConexion.writableDatabase
         val contentValues = ContentValues().apply {
-            put("nombre", categoriaEjer.nombre)
-            put("descripcion", categoriaEjer.descripcion)
+            put("nombre", nombre)
+            put("descripcion", descripcion)
         }
 
         return try {
@@ -56,16 +60,16 @@ class DCategoriaEjer(context: Context) {
         return categoriasEjer
     }
 
-    fun actualizarCategoriaEjer(categoriaEjer: CategoriaEjer): String {
+    fun actualizarCategoriaEjer(): String {
         val db = dConexion.writableDatabase
         val contentValues = ContentValues().apply {
-            put("nombre", categoriaEjer.nombre)
-            put("descripcion", categoriaEjer.descripcion)
+            put("nombre", nombre)
+            put("descripcion", descripcion)
         }
 
         return try {
             val resultado = db.update(
-                "categoria_ejer", contentValues, "id = ?", arrayOf(categoriaEjer.id.toString())
+                "categoria_ejer", contentValues, "id = ?", arrayOf(id.toString())
             )
             db.close()
 
@@ -80,7 +84,7 @@ class DCategoriaEjer(context: Context) {
         }
     }
 
-    fun eliminarCategoriaEjer(id: Int): String {
+    fun eliminarCategoriaEjer(): String {
         val db = dConexion.writableDatabase
         return try {
             val resultado = db.delete("categoria_ejer", "id = ?", arrayOf(id.toString()))
@@ -97,7 +101,7 @@ class DCategoriaEjer(context: Context) {
         }
     }
 
-    fun getRelacionOfCategoriaEjer(id: Int): List<PlanEjercicio> {
+    fun getRelacionOfCategoriaEjer(): List<PlanEjercicio> {
         val planesEjercicio = mutableListOf<PlanEjercicio>()
         val db = dConexion.readableDatabase
         var cursor = db.rawQuery(

@@ -1,7 +1,7 @@
 package com.parcial.apparquip1.Negocio
 
 import android.content.Context
-import com.parcial.apparquip1.Datos.Cliente
+import com.parcial.apparquip1.Datos.entidades.Cliente
 import com.parcial.apparquip1.Datos.DCliente
 
 //class NCliente(context: Context) {
@@ -22,8 +22,11 @@ class NCliente(context: Context) {
         if (nombre.isEmpty() || telefono.isEmpty()) {
             return "Faltan datos"
         }
-        val cliente: Cliente = Cliente(0, nombre, meta, telefono, caracteristicas)
-        return dCliente.insertarCliente(cliente)
+        dCliente.nombre = nombre
+        dCliente.telefono = telefono
+        dCliente.meta = meta
+        dCliente.caracteristicas = caracteristicas
+        return dCliente.insertarCliente()
     }
 
     fun obtenerClientes(): List<Cliente> {
@@ -33,18 +36,22 @@ class NCliente(context: Context) {
     fun actualizarCliente(
         id: Int, nombre: String, telefono: String, meta: String, caracteristicas: String
     ): String {
-        if (nombre == null || telefono == null) {
+        if (dCliente.nombre == null || dCliente.telefono == null) {
             return "Cliente no encontrado"
         }
-        val cliente: Cliente = Cliente(id,nombre, meta, telefono, caracteristicas)
-        return dCliente.actualizarCliente(cliente)
+        dCliente.id = id
+        dCliente.nombre = nombre
+        dCliente.telefono = telefono
+        dCliente.meta = meta
+        dCliente.caracteristicas = caracteristicas
+        return dCliente.actualizarCliente()
     }
 
     fun eliminarCliente(id: Int): String {
-
         if (id == null) {
             return "Cliente no encontrado"
         }
+        dCliente.id = id
         return dCliente.eliminarCliente(id);
     }
 }

@@ -1,9 +1,9 @@
 package com.parcial.apparquip1.Negocio
 
 import android.content.Context
-import com.parcial.apparquip1.Datos.CategoriaEjer
+import com.parcial.apparquip1.Datos.entidades.CategoriaEjer
 import com.parcial.apparquip1.Datos.DCategoriaEjer
-import com.parcial.apparquip1.Datos.PlanEjercicio
+import com.parcial.apparquip1.Datos.entidades.PlanEjercicio
 
 class NCategoriaEjer(context: Context) {
     private val dCategoriaEjer: DCategoriaEjer = DCategoriaEjer(context)
@@ -12,8 +12,9 @@ class NCategoriaEjer(context: Context) {
         if (nombre.isEmpty() || descripcion.isEmpty()) {
             return "Faltan datos"
         }
-        val categoriaEjer: CategoriaEjer = CategoriaEjer(0, nombre, descripcion)
-        return dCategoriaEjer.insertarCategoriaEjer(categoriaEjer)
+        dCategoriaEjer.nombre = nombre
+        dCategoriaEjer.descripcion = descripcion
+        return dCategoriaEjer.insertarCategoriaEjer()
     }
 
     fun obtenerCategoriasEjer(): List<CategoriaEjer> {
@@ -24,19 +25,24 @@ class NCategoriaEjer(context: Context) {
         if (nombre == null || descripcion == null) {
             return "Categoria no encontrada"
         }
-        val categoriaEjer: CategoriaEjer = CategoriaEjer(id, nombre, descripcion)
-        return dCategoriaEjer.actualizarCategoriaEjer(categoriaEjer)
+        dCategoriaEjer.id = id
+        dCategoriaEjer.nombre = nombre
+        dCategoriaEjer.descripcion = descripcion
+        return dCategoriaEjer.actualizarCategoriaEjer()
     }
 
     fun eliminarCategoriaEjer(id: Int): String {
         if (id == null) {
             return "Categoria no encontrada"
         }
-        return dCategoriaEjer.eliminarCategoriaEjer(id);
+        return dCategoriaEjer.eliminarCategoriaEjer();
     }
 
-    fun getRelacionOfCategoriaEjer(idCategoriaEjercicio: Int): List<PlanEjercicio> {
-        return dCategoriaEjer.getRelacionOfCategoriaEjer(idCategoriaEjercicio)
+    fun getRelacionOfCategoriaEjer(id: Int?): List<PlanEjercicio> {
+        if (id == null) {
+            return ArrayList<PlanEjercicio>()
+        }
+        dCategoriaEjer.id = id
+        return dCategoriaEjer.getRelacionOfCategoriaEjer()
     }
-
 }

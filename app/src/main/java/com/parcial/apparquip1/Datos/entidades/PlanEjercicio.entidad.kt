@@ -1,4 +1,4 @@
-package com.parcial.apparquip1.Datos
+package com.parcial.apparquip1.Datos.entidades
 
 class PlanEjercicio {
     var id: Int = 0

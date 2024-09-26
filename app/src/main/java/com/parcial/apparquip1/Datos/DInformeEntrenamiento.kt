@@ -1,12 +1,14 @@
 package com.parcial.apparquip1.Datos
 
 import android.content.Context
+import com.parcial.apparquip1.Datos.entidades.Alimentacion
+import com.parcial.apparquip1.Datos.entidades.PlanEjercicio
 
 
 class DInformeEntrenamiento(context: Context) {
     private val dConexion: DConexion = DConexion(context);
-
-    fun getPlanAlimentacionPorRutina(idRutina: Int): Alimentacion? {
+    var idRutina: Int = 0
+    fun getPlanAlimentacionPorRutina(): Alimentacion? {
         val db = dConexion.readableDatabase
         val cursor = db.rawQuery(
             "SELECT * FROM alimentacion WHERE id = (SELECT id_planAlimentacion FROM rutina WHERE id = ?)",
@@ -36,7 +38,7 @@ class DInformeEntrenamiento(context: Context) {
         return null
     }
 
-    fun getPlanesEjerciciosPorRutina(idRutina: Int): List<PlanEjercicio> {
+    fun getPlanesEjerciciosPorRutina(): List<PlanEjercicio> {
         val db = dConexion.readableDatabase
         val cursor = db.rawQuery(
             """

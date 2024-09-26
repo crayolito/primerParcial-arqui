@@ -1,10 +1,10 @@
 package com.parcial.apparquip1.Presentacion
 
 import android.content.Context
-import com.parcial.apparquip1.Datos.Alimentacion
-import com.parcial.apparquip1.Datos.Cliente
-import com.parcial.apparquip1.Datos.PlanEjercicio
-import com.parcial.apparquip1.Datos.Rutina
+import com.parcial.apparquip1.Datos.entidades.Alimentacion
+import com.parcial.apparquip1.Datos.entidades.Cliente
+import com.parcial.apparquip1.Datos.entidades.PlanEjercicio
+import com.parcial.apparquip1.Datos.entidades.Rutina
 import com.parcial.apparquip1.Negocio.NCliente
 import com.parcial.apparquip1.Negocio.NInformeEntrenamiento
 import com.parcial.apparquip1.Negocio.NRutina
@@ -15,11 +15,16 @@ class PInformeEntrenamiento(context: Context) {
     private val nRutina: NRutina = NRutina(context)
     private val nCliente: NCliente = NCliente(context)
 
-    fun getPlanAlimentacionPorRutina(idRutina: Int): Alimentacion? {
+    var idRutina: Int = 0
+    var alimentacion: Alimentacion? = null
+    var ejercicios: List<PlanEjercicio> = listOf()
+    var path: String = ""
+    var numeroWhatsapp: String = ""
+    fun getPlanAlimentacionPorRutina(): Alimentacion? {
         return nInformeEjercicio.getPlanAlimentacionPorRutina(idRutina)
     }
 
-    fun getPlanesEjerciciosPorRutina(idRutina: Int): List<PlanEjercicio> {
+    fun getPlanesEjerciciosPorRutina(): List<PlanEjercicio> {
         return nInformeEjercicio.getPlanesEjerciciosPorRutina(idRutina)
     }
 
@@ -32,16 +37,16 @@ class PInformeEntrenamiento(context: Context) {
     }
 
     fun generarPdf(
-        context: Context, alimentacion: Alimentacion, ejercicios: List<PlanEjercicio>
+        context: Context
     ): String {
-        return nInformeEjercicio.generarPdf(context, alimentacion, ejercicios)
+        return nInformeEjercicio.generarPdf(context, alimentacion!!, ejercicios)
     }
 
-    fun abrirPdf(context: Context, path: String) {
+    fun abrirPdf(context: Context) {
         nInformeEjercicio.abrirPdf(context, path)
     }
 
-    fun compartirPdfWhatsapp(context: Context, filePath: String, numeroWhatsapp: String) {
-        nInformeEjercicio.compartirPdfWhatsapp(context, filePath, numeroWhatsapp)
+    fun compartirPdfWhatsapp(context: Context) {
+        nInformeEjercicio.compartirPdfWhatsapp(context, path, numeroWhatsapp)
     }
 }

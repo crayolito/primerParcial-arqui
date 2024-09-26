@@ -2,18 +2,24 @@ package com.parcial.apparquip1.Datos
 
 import android.content.ContentValues
 import android.content.Context
+import com.parcial.apparquip1.Datos.entidades.Alimentacion
+import com.parcial.apparquip1.Datos.entidades.Rutina
 
 class DAlimentos(context: Context) {
     private val dConexion: DConexion = DConexion(context)
+    var id: Int = 0
+    var titulo: String = ""
+    var descripcion: String = ""
+    var noprocesado: String = ""
+    var procesado: String = ""
 
-    fun insertarAlimento(alimento: Alimentacion): String {
-        println("HOLA ${alimento.titulo}")
+    fun insertarAlimento(): String {
         val db = dConexion.writableDatabase
         val contentValues = ContentValues().apply {
-            put("titulo", alimento.titulo)
-            put("descripcion", alimento.descripcion)
-            put("noprocesado", alimento.noprocesado)
-            put("procesado", alimento.procesado)
+            put("titulo", titulo)
+            put("descripcion", descripcion)
+            put("noprocesado", noprocesado)
+            put("procesado", procesado)
         }
 
         return try {
@@ -64,18 +70,18 @@ class DAlimentos(context: Context) {
         return alimentos
     }
 
-    fun actualizarAlimento(alimento: Alimentacion): String {
+    fun actualizarAlimento(): String {
         val db = dConexion.writableDatabase
         val contentValues = ContentValues().apply {
-            put("titulo", alimento.titulo)
-            put("descripcion", alimento.descripcion)
-            put("noprocesado", alimento.noprocesado)
-            put("procesado", alimento.procesado)
+            put("titulo", titulo)
+            put("descripcion", descripcion)
+            put("noprocesado", noprocesado)
+            put("procesado", procesado)
         }
 
         return try {
             val resultado =
-                db.update("alimentacion", contentValues, "id = ?", arrayOf(alimento.id.toString()))
+                db.update("alimentacion", contentValues, "id = ?", arrayOf(id.toString()))
             db.close()
 
             if (resultado != -1) {
@@ -89,7 +95,7 @@ class DAlimentos(context: Context) {
         }
     }
 
-    fun eliminarAlimento(id: Int): String {
+    fun eliminarAlimento(): String {
         val db = dConexion.writableDatabase
         return try {
             val resultado = db.delete("alimentacion", "id = ?", arrayOf(id.toString()))
@@ -106,7 +112,7 @@ class DAlimentos(context: Context) {
         }
     }
 
-    fun getRelacionOfRutina(id: Int): List<Rutina> {
+    fun getRelacionOfRutina(): List<Rutina> {
         val rutinas = ArrayList<Rutina>()
         try {
             val db = dConexion.readableDatabase

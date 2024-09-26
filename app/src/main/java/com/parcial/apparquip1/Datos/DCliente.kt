@@ -2,18 +2,27 @@ package com.parcial.apparquip1.Datos
 
 import android.content.ContentValues
 import android.content.Context
+import com.parcial.apparquip1.Datos.entidades.Cliente
 
 
 class DCliente(context: Context) {
     private val dConexion: DConexion = DConexion(context)
+    var id: Int = 0
+    var nombre: String = ""
+    var telefono: String = ""
+    var meta: String = ""
+    var caracteristicas: String = ""
 
-    fun insertarCliente(cliente: Cliente): String {
+    //public getId(): Int {
+    //    return id
+    //}
+    fun insertarCliente(): String {
         val db = dConexion.writableDatabase
         val contentValues = ContentValues().apply {
-            put("nombre", cliente.nombre)
-            put("telefono", cliente.telefono)
-            put("meta", cliente.meta)
-            put("caracteristicas", cliente.caracteristicas)
+            put("nombre", nombre)
+            put("telefono", telefono)
+            put("meta", meta)
+            put("caracteristicas", caracteristicas)
         }
 
         return try {
@@ -65,17 +74,17 @@ class DCliente(context: Context) {
         return clientes
     }
 
-    fun actualizarCliente(cliente: Cliente): String {
+    fun actualizarCliente(): String {
         return try {
             val db = dConexion.writableDatabase
             val contentValues = ContentValues().apply {
-                put("nombre", cliente.nombre)
-                put("telefono", cliente.telefono)
-                put("meta", cliente.meta)
-                put("caracteristicas", cliente.caracteristicas)
+                put("nombre", nombre)
+                put("telefono", telefono)
+                put("meta", meta)
+                put("caracteristicas", caracteristicas)
             }
             val resultado = db.update(
-                "cliente", contentValues, "id = ?", arrayOf(cliente.id.toString())
+                "cliente", contentValues, "id = ?", arrayOf(id.toString())
             )
             db.close()
             if (resultado > 0) {

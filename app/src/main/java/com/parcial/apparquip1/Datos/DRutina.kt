@@ -2,11 +2,17 @@ package com.parcial.apparquip1.Datos
 
 import android.content.ContentValues
 import android.content.Context
+import com.parcial.apparquip1.Datos.entidades.PlanEjercicio
+import com.parcial.apparquip1.Datos.entidades.Rutina
 
 class DRutina(context: Context) {
     private val dConexion: DConexion = DConexion(context)
-
-    fun obtenerRutina(id: Int): Rutina? {
+    var id: Int = 0
+    var titulo: String = ""
+    var idPlanAlimentacion: Int = 0
+    var idPlanesEjercicios: List<PlanEjercicio> = listOf()
+    var rutina: Rutina = Rutina(0, "", 0)
+    fun obtenerRutina(): Rutina? {
         var rutina: Rutina? = null
         try {
             val db = dConexion.readableDatabase
@@ -34,11 +40,7 @@ class DRutina(context: Context) {
         return rutina
     }
 
-    fun insertarRutina(
-        idPlanAlimentacion: Int,
-        idPlanesEjercicios: List<PlanEjercicio>,
-        rutina: Rutina
-    ): String {
+    fun insertarRutina(): String {
         val dbRutina = dConexion.writableDatabase
         val valoresRutina = ContentValues().apply {
             put("titulo", rutina.titulo)
@@ -98,11 +100,7 @@ class DRutina(context: Context) {
         return rutinas
     }
 
-    fun actualizarRutina(
-        idPlanAlimentacion: Int,
-        idPlanesEjercicios: List<PlanEjercicio>,
-        rutina: Rutina
-    ): String {
+    fun actualizarRutina(): String {
         val dbRutina = dConexion.writableDatabase
         val valoresRutina = ContentValues().apply {
             put("titulo", rutina.titulo)
@@ -144,7 +142,7 @@ class DRutina(context: Context) {
         }
     }
 
-    fun eliminarRutina(id: Int): String {
+    fun eliminarRutina(): String {
         val db = dConexion.writableDatabase
         db.beginTransaction()
         return try {

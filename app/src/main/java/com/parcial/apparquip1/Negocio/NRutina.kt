@@ -1,10 +1,9 @@
 package com.parcial.apparquip1.Negocio
 
 import android.content.Context
-import com.parcial.apparquip1.Datos.Alimentacion
 import com.parcial.apparquip1.Datos.DRutina
-import com.parcial.apparquip1.Datos.PlanEjercicio
-import com.parcial.apparquip1.Datos.Rutina
+import com.parcial.apparquip1.Datos.entidades.PlanEjercicio
+import com.parcial.apparquip1.Datos.entidades.Rutina
 
 class NRutina(context: Context) {
     private val dRutina: DRutina = DRutina(context)
@@ -13,14 +12,17 @@ class NRutina(context: Context) {
         if (id <= 0) {
             return null
         }
-
-        return dRutina.obtenerRutina(id)
+        dRutina.id = id
+        return dRutina.obtenerRutina()
     }
 
     fun insertarRutina(
         idPlanAlimentacion: Int, idPlanesEjercicios: List<PlanEjercicio>, rutina: Rutina
     ): String {
-        return dRutina.insertarRutina(idPlanAlimentacion, idPlanesEjercicios, rutina)
+        dRutina.idPlanAlimentacion = idPlanAlimentacion
+        dRutina.idPlanesEjercicios = idPlanesEjercicios
+        dRutina.rutina = rutina
+        return dRutina.insertarRutina()
     }
 
     fun obtenerRutinas(): List<Rutina> {
@@ -31,15 +33,17 @@ class NRutina(context: Context) {
         if (idPlanAlimentacion <= 0) {
             return "El id del plan de alimentación no es válido"
         }
-
-        return dRutina.actualizarRutina(idPlanAlimentacion, idPlanesEjercicios, rutina)
+        dRutina.idPlanAlimentacion = idPlanAlimentacion
+        dRutina.idPlanesEjercicios = idPlanesEjercicios
+        dRutina.rutina = rutina
+        return dRutina.actualizarRutina()
     }
 
     fun eliminarRutina(id: Int): String {
         if (id <= 0) {
             return "El id de la rutina no es válido"
         }
-
-        return dRutina.eliminarRutina(id)
+        dRutina.id = id
+        return dRutina.eliminarRutina()
     }
 }

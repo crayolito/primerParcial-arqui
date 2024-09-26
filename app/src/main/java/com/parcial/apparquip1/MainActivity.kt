@@ -1,8 +1,6 @@
 package com.parcial.apparquip1
 
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
@@ -16,19 +14,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.parcial.apparquip1.Datos.DConexion
-import com.parcial.apparquip1.Presentacion.PAlimentacion
-import com.parcial.apparquip1.Presentacion.PCategoriEjer
-import com.parcial.apparquip1.Presentacion.PCliente
-import com.parcial.apparquip1.Presentacion.PHome
-import com.parcial.apparquip1.Presentacion.PPlanEjercicio
+import com.parcial.apparquip1.Screen.PAlimentacion
+import com.parcial.apparquip1.Screen.PCategoriEjer
+import com.parcial.apparquip1.Screen.PCliente
+import com.parcial.apparquip1.Screen.PHome
+import com.parcial.apparquip1.Screen.PPlanEjercicio
 import com.parcial.apparquip1.ui.theme.Typography
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.ui.text.style.TextAlign
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.parcial.apparquip1.Presentacion.PInformeEntrenamiento
-import com.parcial.apparquip1.Presentacion.PRutina
+import com.parcial.apparquip1.Screen.PInformeEntrenamiento
+import com.parcial.apparquip1.Screen.PRutina
 
 class MainActivity : ComponentActivity() {
     private lateinit var db: DConexion

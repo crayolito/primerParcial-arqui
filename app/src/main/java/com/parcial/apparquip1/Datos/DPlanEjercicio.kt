@@ -3,26 +3,32 @@ package com.parcial.apparquip1.Datos
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import com.parcial.apparquip1.Datos.entidades.PlanEjercicio
+import com.parcial.apparquip1.Datos.entidades.Rutina
 
 class DPlanEjercicio(context: Context) {
     private val dConexion: DConexion = DConexion(context)
-
-    fun insertarPlanEjercicio(idCategoriaEjercicio: Int, planEjercicio: PlanEjercicio): String {
+    var id: Int = 0
+    var idCategoriaEjercicio: Int = 0
+    var titulo: String = ""
+    var motivo: String = ""
+    var objetivo: String = ""
+    var video: String = ""
+    var proceso: String = ""
+    fun insertarPlanEjercicio(): String {
         val dbPlanEjercicio = dConexion.writableDatabase
         val valoresPlanEjercicio = ContentValues().apply {
-            put("titulo", planEjercicio.titulo)
-            put("motivo", planEjercicio.motivo)
-            put("objetivo", planEjercicio.objetivo)
-            put("video", planEjercicio.video)
-            put("proceso", planEjercicio.proceso)
+            put("titulo", titulo)
+            put("motivo", motivo)
+            put("objetivo", objetivo)
+            put("video", video)
+            put("proceso", proceso)
         }
 
         return try {
             val idPlanEjercicio =
                 dbPlanEjercicio.insert("planEjercicio", null, valoresPlanEjercicio)
             dbPlanEjercicio.close()
-            println(" ESTE ES EL ID : $idPlanEjercicio")
-            println(" ESTE ES EL ID : $idCategoriaEjercicio")
 
             val dbPlanCategoria = dConexion.writableDatabase
             val valoresPlanCategoria = ContentValues().apply {
@@ -94,19 +100,19 @@ class DPlanEjercicio(context: Context) {
         return planesEjercicio
     }
 
-    fun actualizarPlanEjercicio(idCategoriaEjercicio: Int, planEjercicio: PlanEjercicio): String {
+    fun actualizarPlanEjercicio(): String {
         val db = dConexion.writableDatabase
         val contentValues = ContentValues().apply {
-            put("titulo", planEjercicio.titulo)
-            put("motivo", planEjercicio.motivo)
-            put("objetivo", planEjercicio.objetivo)
-            put("video", planEjercicio.video)
-            put("proceso", planEjercicio.proceso)
+            put("titulo", titulo)
+            put("motivo", motivo)
+            put("objetivo", objetivo)
+            put("video", video)
+            put("proceso", proceso)
         }
 
         return try {
             val resultado = db.update(
-                "planEjercicio", contentValues, "id = ?", arrayOf(planEjercicio.id.toString())
+                "planEjercicio", contentValues, "id = ?", arrayOf(id.toString())
             )
 
             // Actualizar la tabla plan_categoria
@@ -117,7 +123,7 @@ class DPlanEjercicio(context: Context) {
                 "plan_categoria",
                 contentValuesPlanCategoria,
                 "id_planEjercicio = ?",
-                arrayOf(planEjercicio.id.toString())
+                arrayOf(id.toString())
             )
 
             db.close()
@@ -133,7 +139,7 @@ class DPlanEjercicio(context: Context) {
         }
     }
 
-    fun eliminarPlanEjercicio(id: Int): String {
+    fun eliminarPlanEjercicio(): String {
         val db = dConexion.writableDatabase
 
         // Iniciar la transacción
@@ -164,7 +170,7 @@ class DPlanEjercicio(context: Context) {
         }
     }
 
-    fun getRelacionOfRutina(id: Int): List<Rutina> {
+    fun getRelacionOfRutina(): List<Rutina> {
         val rutinas = mutableListOf<Rutina>()
         val db = dConexion.readableDatabase
         var cursor: Cursor? = null

@@ -1,9 +1,9 @@
 package com.parcial.apparquip1.Negocio
 
 import android.content.Context
-import com.parcial.apparquip1.Datos.Alimentacion
+import com.parcial.apparquip1.Datos.entidades.Alimentacion
 import com.parcial.apparquip1.Datos.DAlimentos
-import com.parcial.apparquip1.Datos.Rutina
+import com.parcial.apparquip1.Datos.entidades.Rutina
 
 class NAlimentacion(context: Context) {
     private val dAlimentos: DAlimentos = DAlimentos(context)
@@ -14,8 +14,11 @@ class NAlimentacion(context: Context) {
         if (titulo.isEmpty() || descripcion.isEmpty() || noprocesado.isEmpty() || procesado.isEmpty()) {
             return "Faltan datos"
         }
-        val alimento: Alimentacion = Alimentacion(0, titulo, descripcion, noprocesado, procesado)
-        return dAlimentos.insertarAlimento(alimento)
+        dAlimentos.titulo = titulo
+        dAlimentos.descripcion = descripcion
+        dAlimentos.noprocesado = noprocesado
+        dAlimentos.procesado = procesado
+        return dAlimentos.insertarAlimento()
     }
 
     fun getPlanesAlimentacion(): List<Alimentacion> {
@@ -28,18 +31,27 @@ class NAlimentacion(context: Context) {
         if (titulo.isEmpty() || descripcion.isEmpty() || noprocesado.isEmpty() || procesado.isEmpty()) {
             return "Alimento no encontrado"
         }
-        val alimento: Alimentacion = Alimentacion(id, titulo, descripcion, noprocesado, procesado)
-        return dAlimentos.actualizarAlimento(alimento)
+        dAlimentos.id = id
+        dAlimentos.titulo = titulo
+        dAlimentos.descripcion = descripcion
+        dAlimentos.noprocesado = noprocesado
+        dAlimentos.procesado = procesado
+        return dAlimentos.actualizarAlimento()
     }
 
     fun deletePlanAlimentacion(id: Int): String {
         if (id == null) {
             return "Alimento no encontrado"
         }
-        return dAlimentos.eliminarAlimento(id)
+        dAlimentos.id = id
+        return dAlimentos.eliminarAlimento()
     }
 
     fun getRelacionOfRutina(id: Int): List<Rutina> {
-        return dAlimentos.getRelacionOfRutina(id)
+        if (id == null) {
+            return emptyList()
+        }
+        dAlimentos.id = id
+        return dAlimentos.getRelacionOfRutina()
     }
 }

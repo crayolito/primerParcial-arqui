@@ -1,8 +1,8 @@
 package com.parcial.apparquip1.Presentacion
 
-import com.parcial.apparquip1.Datos.Alimentacion
-import com.parcial.apparquip1.Datos.PlanEjercicio
-import com.parcial.apparquip1.Datos.Rutina
+import com.parcial.apparquip1.Datos.entidades.Alimentacion
+import com.parcial.apparquip1.Datos.entidades.PlanEjercicio
+import com.parcial.apparquip1.Datos.entidades.Rutina
 import com.parcial.apparquip1.Negocio.NAlimentacion
 import com.parcial.apparquip1.Negocio.NPlanEjercicio
 import com.parcial.apparquip1.Negocio.NRutina
@@ -13,15 +13,13 @@ class PRutina(context: Context) {
     private val nPlanEjercicio: NPlanEjercicio = NPlanEjercicio(context)
     private val nAlimentacion: NAlimentacion = NAlimentacion(context)
 
-    fun obtenerRutina(id: Int): Rutina? {
-        return nRutina.obtenerRutina(id)
-    }
+    var id: Int = 0
+    var titulo: String = ""
+    var idPlanAlimentacion: Int = 0
+    var idPlanesEjercicios: List<PlanEjercicio> = listOf()
+    var rutina: Rutina = Rutina(0, "", 0)
 
-    fun insertarRutina(
-        idPlanAlimentacion: Int,
-        idPlanesEjercicios: List<PlanEjercicio>,
-        rutina: Rutina
-    ): String {
+    fun insertarRutina(): String {
         return nRutina.insertarRutina(idPlanAlimentacion, idPlanesEjercicios, rutina)
     }
 
@@ -29,15 +27,11 @@ class PRutina(context: Context) {
         return nRutina.obtenerRutinas()
     }
 
-    fun actualizarRutina(
-        idPlanAlimentacion: Int,
-        idPlanesEjercicios: List<PlanEjercicio>,
-        rutina: Rutina
-    ): String {
+    fun actualizarRutina(): String {
         return nRutina.actualizarRutina(idPlanAlimentacion, idPlanesEjercicios, rutina)
     }
 
-    fun eliminarRutina(id: Int): String {
+    fun eliminarRutina(): String {
         return nRutina.eliminarRutina(id)
     }
 

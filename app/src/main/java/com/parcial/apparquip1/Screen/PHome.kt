@@ -1,4 +1,4 @@
-package com.parcial.apparquip1.Presentacion
+package com.parcial.apparquip1.Screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
